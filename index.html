@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Reflow Point Name Regex Generator</title>
+
+        <!-- PWA Meta Tags -->
+        <link rel="manifest" href="manifest.json" />
+        <meta name="theme-color" content="#3b82f6" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Reflow Regex" />
+        <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Lucide React Icons -->
+        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+        <style>
+            .icon {
+                width: 16px;
+                height: 16px;
+                display: inline-block;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50 min-h-screen">
+        <div id="app" class="max-w-4xl mx-auto p-6">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                    Reflow Point Name Regex Generator
+                </h1>
+                <p class="text-gray-600 mb-6">
+                    Generate regex patterns for Tridium Niagara Reflow point
+                    mapping. Patterns are automatically formatted for Reflow
+                    (lowercase, wrapped in forward slashes).
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Input Section -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            Point Name Variations
+                        </h2>
+                        <p class="text-sm text-gray-600">
+                            Enter all the variations of your point name you want
+                            to match:
+                        </p>
+
+                        <div id="point-inputs" class="space-y-2">
+                            <div class="flex gap-2">
+                                <input
+                                    type="text"
+                                    value="dat"
+                                    placeholder="Enter point name variation..."
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                    style="display: none"
+                                >
+                                    <i data-lucide="trash-2" class="icon"></i>
+                                </button>
+                            </div>
+                            <div class="flex gap-2">
+                                <input
+                                    type="text"
+                                    value="disch air temp"
+                                    placeholder="Enter point name variation..."
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                >
+                                    <i data-lucide="trash-2" class="icon"></i>
+                                </button>
+                            </div>
+                            <div class="flex gap-2">
+                                <input
+                                    type="text"
+                                    value="discharge air temperature"
+                                    placeholder="Enter point name variation..."
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                <button
+                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                >
+                                    <i data-lucide="trash-2" class="icon"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            id="add-btn"
+                            class="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        >
+                            <i data-lucide="plus" class="icon"></i>
+                            Add Another Variation
+                        </button>
+                    </div>
+
+                    <!-- Output Section -->
+                    <div class="space-y-4">
+                        <h2 class="text-xl font-semibold text-gray-800">
+                            Generated Regex
+                        </h2>
+
+                        <div class="relative">
+                            <div
+                                id="regex-output"
+                                class="bg-gray-100 border border-gray-300 rounded-md p-3 font-mono text-sm min-h-[50px] flex items-center"
+                            >
+                                <span class="text-gray-500"
+                                    >Enter point names to generate
+                                    regex...</span
+                                >
+                            </div>
+                            <button
+                                id="copy-btn"
+                                class="absolute top-2 right-2 p-1 text-gray-600 hover:text-blue-600 transition-colors"
+                                style="display: none"
+                            >
+                                <i data-lucide="copy" class="icon"></i>
+                            </button>
+                        </div>
+
+                        <div
+                            id="copy-success"
+                            class="flex items-center gap-2 text-green-600 text-sm"
+                            style="display: none"
+                        >
+                            <i data-lucide="check-circle" class="icon"></i>
+                            Copied to clipboard!
+                        </div>
+
+                        <div
+                            class="bg-blue-50 border border-blue-200 rounded-md p-3"
+                        >
+                            <h3 class="font-semibold text-blue-800 mb-2">
+                                Reflow Usage:
+                            </h3>
+                            <ol
+                                class="text-sm text-blue-700 space-y-1 list-decimal list-inside"
+                            >
+                                <li>Copy the generated regex pattern</li>
+                                <li>
+                                    In Reflow, set the point identifier type to
+                                    "Regular Expression"
+                                </li>
+                                <li>
+                                    Paste the pattern (including the forward
+                                    slashes)
+                                </li>
+                                <li>Test with your actual point names below</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Section -->
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                        Test Your Regex
+                    </h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Test Point Names (one per line):
+                            </label>
+                            <textarea
+                                id="test-input"
+                                placeholder="discharge air temp&#10;da_temp&#10;supply air temperature&#10;mixed air temp"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                                rows="6"
+                            ></textarea>
+                        </div>
+
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-gray-700 mb-2"
+                            >
+                                Test Results:
+                            </label>
+                            <div
+                                id="test-results"
+                                class="border border-gray-300 rounded-md p-3 bg-gray-50 min-h-[156px]"
+                            >
+                                <p class="text-gray-500 text-sm">
+                                    Enter test strings to see results...
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="mt-6 bg-yellow-50 border border-yellow-200 rounded-md p-4"
+                >
+                    <div class="flex items-start gap-2">
+                        <i
+                            data-lucide="alert-circle"
+                            class="icon text-yellow-600 mt-0.5"
+                        ></i>
+                        <div class="text-sm text-yellow-800">
+                            <p class="font-semibold mb-1">Important Notes:</p>
+                            <ul class="space-y-1 list-disc list-inside">
+                                <li>
+                                    Reflow converts all point names to lowercase
+                                    before matching
+                                </li>
+                                <li>
+                                    Always test your regex on regex101.com
+                                    before using in Reflow
+                                </li>
+                                <li>
+                                    The generated pattern handles spaces and
+                                    underscores automatically
+                                </li>
+                                <li>
+                                    More specific patterns are generally better
+                                    than overly broad ones
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            // App state
+            let pointNames = [
+                "dat",
+                "disch air temp",
+                "discharge air temperature",
+            ];
+            let generatedRegex = "";
+
+            // DOM elements
+            const pointInputsContainer =
+                document.getElementById("point-inputs");
+            const addBtn = document.getElementById("add-btn");
+            const regexOutput = document.getElementById("regex-output");
+            const copyBtn = document.getElementById("copy-btn");
+            const copySuccess = document.getElementById("copy-success");
+            const testInput = document.getElementById("test-input");
+            const testResults = document.getElementById("test-results");
+
+            // Utility functions
+            function escapeRegex(str) {
+                return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function updatePointInputs() {
+                pointInputsContainer.innerHTML = "";
+
+                pointNames.forEach((name, index) => {
+                    const div = document.createElement("div");
+                    div.className = "flex gap-2";
+
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.value = name;
+                    input.placeholder = "Enter point name variation...";
+                    input.className =
+                        "flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
+                    input.addEventListener("input", (e) => {
+                        pointNames[index] = e.target.value;
+                        generateRegex();
+                    });
+
+                    const button = document.createElement("button");
+                    button.className =
+                        "remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors";
+                    button.style.display =
+                        pointNames.length > 1 ? "block" : "none";
+                    button.innerHTML =
+                        '<i data-lucide="trash-2" class="icon"></i>';
+                    button.addEventListener("click", () => {
+                        pointNames.splice(index, 1);
+                        updatePointInputs();
+                        generateRegex();
+                    });
+
+                    div.appendChild(input);
+                    div.appendChild(button);
+                    pointInputsContainer.appendChild(div);
+                });
+
+                lucide.createIcons();
+            }
+
+            function generateRegex() {
+                const cleanNames = pointNames
+                    .filter((name) => name.trim())
+                    .map((name) => name.toLowerCase().trim());
+
+                if (cleanNames.length === 0) {
+                    generatedRegex = "";
+                    regexOutput.innerHTML =
+                        '<span class="text-gray-500">Enter point names to generate regex...</span>';
+                    copyBtn.style.display = "none";
+                    return;
+                }
+
+                if (cleanNames.length === 1) {
+                    const name = cleanNames[0];
+                    const words = name.split(/[\s_]+/).filter((word) => word);
+                    const pattern = words
+                        .map((word) => escapeRegex(word) + "[a-z]*")
+                        .join("[\\s_]*");
+                    generatedRegex = `/${pattern}/`;
+                } else {
+                    const allWords = cleanNames.flatMap((name) =>
+                        name.split(/[\s_]+/).filter((word) => word),
+                    );
+                    const uniqueWords = [...new Set(allWords)];
+
+                    const commonWords = uniqueWords.filter((word) =>
+                        cleanNames.every((name) => name.includes(word)),
+                    );
+
+                    if (commonWords.length > 0) {
+                        const sortedCommon = commonWords.sort((a, b) => {
+                            const orderMap = {
+                                discharge: 1,
+                                disch: 1,
+                                da: 1,
+                                supply: 2,
+                                return: 3,
+                                air: 4,
+                                temp: 5,
+                                temperature: 5,
+                            };
+                            return (orderMap[a] || 99) - (orderMap[b] || 99);
+                        });
+
+                        const pattern = sortedCommon
+                            .map((word) => escapeRegex(word) + "[a-z]*")
+                            .join("[\\s_]*");
+                        generatedRegex = `/${pattern}/`;
+                    } else {
+                        const patterns = cleanNames.map((name) => {
+                            const words = name
+                                .split(/[\s_]+/)
+                                .filter((word) => word);
+                            return words
+                                .map((word) => escapeRegex(word) + "[a-z]*")
+                                .join("[\\s_]*");
+                        });
+                        generatedRegex = `/(${patterns.join("|")})/`;
+                    }
+                }
+
+                regexOutput.textContent = generatedRegex;
+                copyBtn.style.display = "block";
+                testRegex();
+            }
+
+            function copyToClipboard() {
+                navigator.clipboard
+                    .writeText(generatedRegex)
+                    .then(() => {
+                        copySuccess.style.display = "flex";
+                        setTimeout(() => {
+                            copySuccess.style.display = "none";
+                        }, 2000);
+                    })
+                    .catch((err) => {
+                        console.error("Failed to copy text: ", err);
+                    });
+            }
+
+            function testRegex() {
+                if (!generatedRegex || !testInput.value.trim()) {
+                    testResults.innerHTML =
+                        '<p class="text-gray-500 text-sm">Enter test strings to see results...</p>';
+                    return;
+                }
+
+                try {
+                    const pattern = generatedRegex.slice(1, -1);
+                    const regex = new RegExp(pattern, "i");
+
+                    const testStrings = testInput.value
+                        .split("\n")
+                        .filter((str) => str.trim());
+                    const results = testStrings.map((str) => ({
+                        input: str.trim(),
+                        matches: regex.test(str.toLowerCase().trim()),
+                    }));
+
+                    testResults.innerHTML = results
+                        .map(
+                            (result) => `
+                    <div class="flex items-center gap-2 text-sm mb-2">
+                        ${
+                            result.matches
+                                ? '<i data-lucide="check-circle" class="icon text-green-500"></i>'
+                                : '<div class="w-4 h-4 rounded-full border-2 border-red-500"></div>'
+                        }
+                        <span class="${result.matches ? "text-green-700" : "text-red-700"}">
+                            ${result.input}
+                        </span>
+                    </div>
+                `,
+                        )
+                        .join("");
+
+                    lucide.createIcons();
+                } catch (error) {
+                    testResults.innerHTML = `
+                    <div class="flex items-center gap-2 text-sm text-red-700">
+                        <i data-lucide="alert-circle" class="icon text-red-500"></i>
+                        Error: ${error.message}
+                    </div>
+                `;
+                    lucide.createIcons();
+                }
+            }
+
+            // Event listeners
+            addBtn.addEventListener("click", () => {
+                pointNames.push("");
+                updatePointInputs();
+                generateRegex();
+            });
+
+            copyBtn.addEventListener("click", copyToClipboard);
+            testInput.addEventListener("input", testRegex);
+
+            // Initialize app
+            updatePointInputs();
+            generateRegex();
+
+            // PWA Service Worker Registration
+            if ("serviceWorker" in navigator) {
+                window.addEventListener("load", () => {
+                    navigator.serviceWorker
+                        .register("/service-worker.js")
+                        .then((registration) => {
+                            console.log("SW registered: ", registration);
+                        })
+                        .catch((registrationError) => {
+                            console.log(
+                                "SW registration failed: ",
+                                registrationError,
+                            );
+                        });
+                });
+            }
+        </script>
+    </body>
+</html>
