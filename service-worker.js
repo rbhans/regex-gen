@@ -1,10 +1,10 @@
-const CACHE_NAME = "reflow-regex-generator-v1.0.0";
+const CACHE_NAME = "reflow-regex-generator-v1.1.0";
 const urlsToCache = [
-  "/",
-  "/index.html",
-  "/manifest.json",
-  "/icons/icon-192x192.png",
-  "/icons/icon-512x512.png",
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./icons/icon-192x192.png",
+  "./icons/icon-512x512.png",
   "https://cdn.tailwindcss.com",
   "https://unpkg.com/lucide@latest/dist/umd/lucide.js",
 ];
@@ -39,7 +39,7 @@ self.addEventListener("fetch", (event) => {
       .catch(() => {
         // If both cache and network fail, return offline page
         if (event.request.destination === "document") {
-          return caches.match("/index.html");
+          return caches.match("./index.html");
         }
       }),
   );
@@ -77,8 +77,8 @@ function doBackgroundSync() {
 self.addEventListener("push", (event) => {
   const options = {
     body: event.data ? event.data.text() : "New update available!",
-    icon: "/icons/icon-192x192.png",
-    badge: "/icons/icon-72x72.png",
+    icon: "./icons/icon-192x192.png",
+    badge: "./icons/icon-72x72.png",
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -88,12 +88,12 @@ self.addEventListener("push", (event) => {
       {
         action: "explore",
         title: "Open App",
-        icon: "/icons/icon-192x192.png",
+        icon: "./icons/icon-192x192.png",
       },
       {
         action: "close",
         title: "Close",
-        icon: "/icons/icon-192x192.png",
+        icon: "./icons/icon-192x192.png",
       },
     ],
   };
@@ -108,6 +108,6 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   if (event.action === "explore") {
-    event.waitUntil(clients.openWindow("/"));
+    event.waitUntil(clients.openWindow("./"));
   }
 });

@@ -15,6 +15,20 @@
 
         <!-- Tailwind CSS -->
         <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            'dark-bg': '#1a1a1a',
+                            'dark-surface': '#2d2d2d',
+                            'dark-border': '#404040'
+                        }
+                    }
+                }
+            }
+        </script>
 
         <!-- Lucide React Icons -->
         <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -27,25 +41,73 @@
             }
         </style>
     </head>
-    <body class="bg-gray-50 min-h-screen">
+    <body class="bg-gray-50 dark:bg-dark-bg min-h-screen transition-colors duration-300">
         <div id="app" class="max-w-4xl mx-auto p-6">
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    Reflow Point Name Regex Generator
-                </h1>
-                <p class="text-gray-600 mb-6">
+            <div class="bg-white dark:bg-dark-surface rounded-lg shadow-lg p-6 transition-colors duration-300">
+                <div class="flex justify-between items-start mb-2">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                        Reflow Point Name Regex Generator
+                    </h1>
+                    <button
+                        id="theme-toggle"
+                        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200"
+                        title="Toggle dark mode"
+                    >
+                        <i data-lucide="moon" class="icon text-gray-600 dark:text-gray-300"></i>
+                    </button>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-6">
                     Generate regex patterns for Tridium Niagara Reflow point
                     mapping. Patterns are automatically formatted for Reflow
                     (lowercase, wrapped in forward slashes).
                 </p>
 
+                <!-- Import Existing Regex Section -->
+                <div class="mb-6 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 transition-colors duration-300">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-semibold text-blue-800 dark:text-blue-200">
+                            Import Existing Regex (Optional)
+                        </h2>
+                        <button
+                            id="toggle-import"
+                            class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+                        >
+                            <i data-lucide="chevron-down" class="icon"></i>
+                        </button>
+                    </div>
+                    <div id="import-section" class="space-y-3" style="display: none;">
+                        <p class="text-sm text-blue-700 dark:text-blue-300 mb-3">
+                            Have an existing regex pattern? Paste it here and we'll combine it with your new variations.
+                        </p>
+                        <div class="flex gap-2">
+                            <input
+                                id="existing-regex"
+                                type="text"
+                                placeholder="Paste existing regex (e.g., /discharge.*temp/ or discharge.*temp)"
+                                class="flex-1 px-3 py-2 border border-blue-300 dark:border-blue-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 dark:text-gray-100 font-mono text-sm transition-colors duration-300"
+                            />
+                            <button
+                                id="clear-import"
+                                class="px-3 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-800/50 rounded-md transition-colors"
+                            >
+                                <i data-lucide="x" class="icon"></i>
+                            </button>
+                        </div>
+                        <div
+                            id="import-status"
+                            class="text-sm"
+                            style="display: none;"
+                        ></div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Input Section -->
                     <div class="space-y-4">
-                        <h2 class="text-xl font-semibold text-gray-800">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
                             Point Name Variations
                         </h2>
-                        <p class="text-sm text-gray-600">
+                        <p class="text-sm text-gray-600 dark:text-gray-300">
                             Enter all the variations of your point name you want
                             to match:
                         </p>
@@ -56,10 +118,10 @@
                                     type="text"
                                     value="dat"
                                     placeholder="Enter point name variation..."
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 dark:text-gray-100 transition-colors duration-300"
                                 />
                                 <button
-                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                    class="remove-btn px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
                                     style="display: none"
                                 >
                                     <i data-lucide="trash-2" class="icon"></i>
@@ -70,10 +132,10 @@
                                     type="text"
                                     value="disch air temp"
                                     placeholder="Enter point name variation..."
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 dark:text-gray-100 transition-colors duration-300"
                                 />
                                 <button
-                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                    class="remove-btn px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
                                 >
                                     <i data-lucide="trash-2" class="icon"></i>
                                 </button>
@@ -83,10 +145,10 @@
                                     type="text"
                                     value="discharge air temperature"
                                     placeholder="Enter point name variation..."
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 dark:text-gray-100 transition-colors duration-300"
                                 />
                                 <button
-                                    class="remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                                    class="remove-btn px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
                                 >
                                     <i data-lucide="trash-2" class="icon"></i>
                                 </button>
@@ -95,7 +157,7 @@
 
                         <button
                             id="add-btn"
-                            class="flex items-center gap-2 px-4 py-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                            class="flex items-center gap-2 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
                         >
                             <i data-lucide="plus" class="icon"></i>
                             Add Another Variation
@@ -104,23 +166,23 @@
 
                     <!-- Output Section -->
                     <div class="space-y-4">
-                        <h2 class="text-xl font-semibold text-gray-800">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">
                             Generated Regex
                         </h2>
 
                         <div class="relative">
                             <div
                                 id="regex-output"
-                                class="bg-gray-100 border border-gray-300 rounded-md p-3 font-mono text-sm min-h-[50px] flex items-center"
+                                class="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md p-3 font-mono text-sm min-h-[50px] flex items-center transition-colors duration-300"
                             >
-                                <span class="text-gray-500"
+                                <span class="text-gray-500 dark:text-gray-400"
                                     >Enter point names to generate
                                     regex...</span
                                 >
                             </div>
                             <button
                                 id="copy-btn"
-                                class="absolute top-2 right-2 p-1 text-gray-600 hover:text-blue-600 transition-colors"
+                                class="absolute top-2 right-2 p-1 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                                 style="display: none"
                             >
                                 <i data-lucide="copy" class="icon"></i>
@@ -129,7 +191,7 @@
 
                         <div
                             id="copy-success"
-                            class="flex items-center gap-2 text-green-600 text-sm"
+                            class="flex items-center gap-2 text-green-600 dark:text-green-400 text-sm"
                             style="display: none"
                         >
                             <i data-lucide="check-circle" class="icon"></i>
@@ -137,13 +199,13 @@
                         </div>
 
                         <div
-                            class="bg-blue-50 border border-blue-200 rounded-md p-3"
+                            class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-md p-3 transition-colors duration-300"
                         >
-                            <h3 class="font-semibold text-blue-800 mb-2">
+                            <h3 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">
                                 Reflow Usage:
                             </h3>
                             <ol
-                                class="text-sm text-blue-700 space-y-1 list-decimal list-inside"
+                                class="text-sm text-blue-700 dark:text-blue-300 space-y-1 list-decimal list-inside"
                             >
                                 <li>Copy the generated regex pattern</li>
                                 <li>
@@ -161,36 +223,36 @@
                 </div>
 
                 <!-- Test Section -->
-                <div class="mt-8 pt-6 border-t border-gray-200">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">
+                <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 transition-colors duration-300">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
                         Test Your Regex
                     </h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <div>
                             <label
-                                class="block text-sm font-medium text-gray-700 mb-2"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >
                                 Test Point Names (one per line):
                             </label>
                             <textarea
                                 id="test-input"
                                 placeholder="discharge air temp&#10;da_temp&#10;supply air temperature&#10;mixed air temp"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm"
+                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 font-mono text-sm bg-white dark:bg-gray-700 dark:text-gray-100 transition-colors duration-300"
                                 rows="6"
                             ></textarea>
                         </div>
 
                         <div>
                             <label
-                                class="block text-sm font-medium text-gray-700 mb-2"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                             >
                                 Test Results:
                             </label>
                             <div
                                 id="test-results"
-                                class="border border-gray-300 rounded-md p-3 bg-gray-50 min-h-[156px]"
+                                class="border border-gray-300 dark:border-gray-600 rounded-md p-3 bg-gray-50 dark:bg-gray-800 min-h-[156px] transition-colors duration-300"
                             >
-                                <p class="text-gray-500 text-sm">
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">
                                     Enter test strings to see results...
                                 </p>
                             </div>
@@ -199,14 +261,14 @@
                 </div>
 
                 <div
-                    class="mt-6 bg-yellow-50 border border-yellow-200 rounded-md p-4"
+                    class="mt-6 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-md p-4 transition-colors duration-300"
                 >
                     <div class="flex items-start gap-2">
                         <i
                             data-lucide="alert-circle"
-                            class="icon text-yellow-600 mt-0.5"
+                            class="icon text-yellow-600 dark:text-yellow-400 mt-0.5"
                         ></i>
-                        <div class="text-sm text-yellow-800">
+                        <div class="text-sm text-yellow-800 dark:text-yellow-200">
                             <p class="font-semibold mb-1">Important Notes:</p>
                             <ul class="space-y-1 list-disc list-inside">
                                 <li>
@@ -243,6 +305,8 @@
                 "discharge air temperature",
             ];
             let generatedRegex = "";
+            let importedRegex = "";
+            let isDarkMode = false;
 
             // DOM elements
             const pointInputsContainer =
@@ -253,10 +317,116 @@
             const copySuccess = document.getElementById("copy-success");
             const testInput = document.getElementById("test-input");
             const testResults = document.getElementById("test-results");
+            const toggleImport = document.getElementById("toggle-import");
+            const importSection = document.getElementById("import-section");
+            const existingRegexInput = document.getElementById("existing-regex");
+            const clearImportBtn = document.getElementById("clear-import");
+            const importStatus = document.getElementById("import-status");
+            const themeToggle = document.getElementById("theme-toggle");
 
             // Utility functions
             function escapeRegex(str) {
                 return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function parseImportedRegex(regexString) {
+                if (!regexString.trim()) return null;
+                
+                try {
+                    // Remove forward slashes if present
+                    let cleanRegex = regexString.trim();
+                    if (cleanRegex.startsWith('/') && cleanRegex.endsWith('/')) {
+                        cleanRegex = cleanRegex.slice(1, -1);
+                    }
+                    
+                    // Test if the regex is valid
+                    new RegExp(cleanRegex, 'i');
+                    
+                    return cleanRegex;
+                } catch (error) {
+                    return null;
+                }
+            }
+
+            function showImportStatus(message, isError = false) {
+                importStatus.innerHTML = `
+                    <div class="flex items-center gap-2 ${isError ? 'text-red-600' : 'text-green-600'}">
+                        <i data-lucide="${isError ? 'alert-circle' : 'check-circle'}" class="icon"></i>
+                        ${message}
+                    </div>
+                `;
+                importStatus.style.display = 'block';
+                lucide.createIcons();
+                
+                if (!isError) {
+                    setTimeout(() => {
+                        importStatus.style.display = 'none';
+                    }, 3000);
+                }
+            }
+
+            function toggleImportSection() {
+                const isExpanded = importSection.style.display !== 'none';
+                importSection.style.display = isExpanded ? 'none' : 'block';
+                const icon = toggleImport.querySelector('i');
+                icon.setAttribute('data-lucide', isExpanded ? 'chevron-down' : 'chevron-up');
+                lucide.createIcons();
+            }
+
+            // Theme management functions
+            function initializeTheme() {
+                // Check for saved theme preference or system preference
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                
+                isDarkMode = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+                applyTheme();
+                
+                // Listen for system theme changes
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        isDarkMode = e.matches;
+                        applyTheme();
+                    }
+                });
+            }
+
+            function toggleTheme() {
+                isDarkMode = !isDarkMode;
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                applyTheme();
+                updateManifestThemeColor();
+            }
+
+            function applyTheme() {
+                const htmlElement = document.documentElement;
+                const themeIcon = themeToggle.querySelector('i');
+                
+                if (isDarkMode) {
+                    htmlElement.classList.add('dark');
+                    themeIcon.setAttribute('data-lucide', 'sun');
+                    themeToggle.title = 'Switch to light mode';
+                } else {
+                    htmlElement.classList.remove('dark');
+                    themeIcon.setAttribute('data-lucide', 'moon');
+                    themeToggle.title = 'Switch to dark mode';
+                }
+                
+                lucide.createIcons();
+            }
+
+            function updateManifestThemeColor() {
+                // Update the manifest theme color dynamically
+                const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+                const statusBarStyleMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+                
+                if (themeColorMeta) {
+                    themeColorMeta.content = isDarkMode ? '#1a1a1a' : '#3b82f6';
+                }
+                
+                if (statusBarStyleMeta) {
+                    statusBarStyleMeta.content = isDarkMode ? 'black-translucent' : 'default';
+                }
             }
 
             function updatePointInputs() {
@@ -271,7 +441,7 @@
                     input.value = name;
                     input.placeholder = "Enter point name variation...";
                     input.className =
-                        "flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
+                        "flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 bg-white dark:bg-gray-700 dark:text-gray-100 transition-colors duration-300";
                     input.addEventListener("input", (e) => {
                         pointNames[index] = e.target.value;
                         generateRegex();
@@ -279,7 +449,7 @@
 
                     const button = document.createElement("button");
                     button.className =
-                        "remove-btn px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors";
+                        "remove-btn px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors";
                     button.style.display =
                         pointNames.length > 1 ? "block" : "none";
                     button.innerHTML =
@@ -303,7 +473,16 @@
                     .filter((name) => name.trim())
                     .map((name) => name.toLowerCase().trim());
 
-                if (cleanNames.length === 0) {
+                // Handle case with only imported regex and no variations
+                if (cleanNames.length === 0 && importedRegex) {
+                    generatedRegex = `/${importedRegex}/`;
+                    regexOutput.textContent = generatedRegex;
+                    copyBtn.style.display = "block";
+                    testRegex();
+                    return;
+                }
+
+                if (cleanNames.length === 0 && !importedRegex) {
                     generatedRegex = "";
                     regexOutput.innerHTML =
                         '<span class="text-gray-500">Enter point names to generate regex...</span>';
@@ -311,24 +490,36 @@
                     return;
                 }
 
+                let newPattern = "";
+
                 if (cleanNames.length === 1) {
                     const name = cleanNames[0];
                     const words = name.split(/[\s_]+/).filter((word) => word);
-                    const pattern = words
+                    newPattern = words
                         .map((word) => escapeRegex(word) + "[a-z]*")
                         .join("[\\s_]*");
-                    generatedRegex = `/${pattern}/`;
                 } else {
                     const allWords = cleanNames.flatMap((name) =>
                         name.split(/[\s_]+/).filter((word) => word),
                     );
                     const uniqueWords = [...new Set(allWords)];
 
-                    const commonWords = uniqueWords.filter((word) =>
-                        cleanNames.every((name) => name.includes(word)),
-                    );
+                    // Filter common words to avoid overly broad patterns
+                    const commonWords = uniqueWords.filter((word) => {
+                        // Only consider words that are at least 2 characters long
+                        if (word.length < 2) return false;
+                        
+                        // Check if word appears in all names
+                        return cleanNames.every((name) => name.includes(word));
+                    });
 
-                    if (commonWords.length > 0) {
+                    // Calculate pattern specificity to avoid overly broad matches
+                    const calculateSpecificity = (words) => {
+                        return words.reduce((score, word) => score + word.length, 0);
+                    };
+
+                    if (commonWords.length > 0 && calculateSpecificity(commonWords) >= 6) {
+                        // Only use common words if they provide sufficient specificity
                         const sortedCommon = commonWords.sort((a, b) => {
                             const orderMap = {
                                 discharge: 1,
@@ -343,21 +534,36 @@
                             return (orderMap[a] || 99) - (orderMap[b] || 99);
                         });
 
-                        const pattern = sortedCommon
+                        newPattern = sortedCommon
                             .map((word) => escapeRegex(word) + "[a-z]*")
                             .join("[\\s_]*");
-                        generatedRegex = `/${pattern}/`;
                     } else {
+                        // Fall back to alternation pattern for better specificity
                         const patterns = cleanNames.map((name) => {
                             const words = name
                                 .split(/[\s_]+/)
-                                .filter((word) => word);
+                                .filter((word) => word.length > 0);
+                            
+                            // Ensure minimum pattern complexity
+                            if (words.length === 1 && words[0].length < 3) {
+                                return escapeRegex(words[0]);
+                            }
+                            
                             return words
                                 .map((word) => escapeRegex(word) + "[a-z]*")
                                 .join("[\\s_]*");
                         });
-                        generatedRegex = `/(${patterns.join("|")})/`;
+                        newPattern = `(${patterns.join("|")})`;
                     }
+                }
+
+                // Combine imported regex with new pattern
+                if (importedRegex && newPattern) {
+                    generatedRegex = `/(${importedRegex}|${newPattern})/`;
+                } else if (importedRegex) {
+                    generatedRegex = `/${importedRegex}/`;
+                } else {
+                    generatedRegex = `/${newPattern}/`;
                 }
 
                 regexOutput.textContent = generatedRegex;
@@ -437,7 +643,35 @@
             copyBtn.addEventListener("click", copyToClipboard);
             testInput.addEventListener("input", testRegex);
 
+            toggleImport.addEventListener("click", toggleImportSection);
+
+            existingRegexInput.addEventListener("input", (e) => {
+                const parsed = parseImportedRegex(e.target.value);
+                if (e.target.value.trim() === "") {
+                    importedRegex = "";
+                    importStatus.style.display = "none";
+                    generateRegex();
+                } else if (parsed) {
+                    importedRegex = parsed;
+                    showImportStatus("Valid regex imported successfully!");
+                    generateRegex();
+                } else {
+                    importedRegex = "";
+                    showImportStatus("Invalid regex pattern. Please check your syntax.", true);
+                }
+            });
+
+            clearImportBtn.addEventListener("click", () => {
+                existingRegexInput.value = "";
+                importedRegex = "";
+                importStatus.style.display = "none";
+                generateRegex();
+            });
+
+            themeToggle.addEventListener("click", toggleTheme);
+
             // Initialize app
+            initializeTheme();
             updatePointInputs();
             generateRegex();
 
@@ -445,7 +679,7 @@
             if ("serviceWorker" in navigator) {
                 window.addEventListener("load", () => {
                     navigator.serviceWorker
-                        .register("/service-worker.js")
+                        .register("./service-worker.js")
                         .then((registration) => {
                             console.log("SW registered: ", registration);
                         })
